@@ -1,5 +1,5 @@
 /* ============================================================
-   HR SHOPTIME — main.js
+   HR SHOPTIME — script.js
    ============================================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
