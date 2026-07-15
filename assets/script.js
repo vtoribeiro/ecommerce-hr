@@ -8,14 +8,14 @@ document.addEventListener('DOMContentLoaded', () => {
      DATA — Produtos fictícios
      ========================================================== */
   const PRODUCTS = [
-    { id: 'p1', brand: 'Armaf', name: 'Club de Nuit Intense', price: 349.90, oldPrice: 429.90, type: 'perfume' },
-    { id: 'p2', brand: 'Lattafa', name: 'Khamrah Qahwa', price: 289.90, oldPrice: null, type: 'perfume' },
-    { id: 'p3', brand: 'Maison Alhambra', name: 'Highness Noir', price: 399.90, oldPrice: 459.90, type: 'perfume' },
-    { id: 'p4', brand: 'French Avenue', name: 'Essence Noire', price: 259.90, oldPrice: null, type: 'perfume' },
-    { id: 'p5', brand: 'Al Wataniah', name: 'Oud Al Sultan', price: 319.90, oldPrice: null, type: 'perfume' },
-    { id: 'p6', brand: 'HR Timepieces', name: 'Relógio Classic Steel', price: 899.90, oldPrice: 1099.90, type: 'watch' },
-    { id: 'p7', brand: 'HR Timepieces', name: 'Relógio Noir Gold', price: 1249.90, oldPrice: null, type: 'watch' },
-    { id: 'p8', brand: 'Armaf', name: 'Tres Nuit', price: 279.90, oldPrice: null, type: 'perfume' },
+    { id: 'p1', brand: 'Armaf', name: 'Club de Nuit Lionheart', price: 349.90, oldPrice: 429.90, type: 'perfume', image: '/images/produtos/club%20de%20nuit%20lionheart.jpeg' },
+    { id: 'p2', brand: 'Lattafa', name: 'Asad', price: 289.90, oldPrice: null, type: 'perfume', image: '/images/produtos/asad%20lataffa.jpeg' },
+    { id: 'p3', brand: 'Maison Alhambra', name: 'Salvo', price: 399.90, oldPrice: 459.90, type: 'perfume', image: '/images/produtos/salvo%20maison%20ahambra.jpeg' },
+    { id: 'p4', brand: 'French Avenue', name: 'Liquid Brun', price: 259.90, oldPrice: null, type: 'perfume', image: '/images/produtos/french%20avenue%20liquid%20brun.jpeg' },
+    { id: 'p5', brand: 'Al Wataniah', name: 'Sabah Al Ward', price: 319.90, oldPrice: null, type: 'perfume', image: '/images/produtos/al%20wataniah%20sabah%20al%20ward.jpeg' },
+    { id: 'p6', brand: 'Extri', name: 'Relógio X6054', price: 899.90, oldPrice: 1099.90, type: 'watch', image: '/images/produtos/EXTRI%20X6054.jpeg' },
+    { id: 'p7', brand: 'Extri', name: 'Relógio X6085', price: 1249.90, oldPrice: null, type: 'watch', image: '/images/produtos/EXTRI%20X6085.jpeg' },
+    { id: 'p8', brand: 'French Avenue', name: 'Vulcan Feu', price: 279.90, oldPrice: null, type: 'perfume', image: '/images/produtos/vulcan%20feu%20french%20avenue.jpeg' },
   ];
 
   const money = (v) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -64,6 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   searchBtn.addEventListener('click', () => {
     const isOpen = navbarSearch.classList.toggle('is-open');
+    navbar.classList.toggle('navbar--search-open', isOpen);
     if (isOpen) {
       setTimeout(() => searchInput.focus(), 260);
     } else {
@@ -74,6 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('click', (e) => {
     if (!navbarSearch.contains(e.target) && navbarSearch.classList.contains('is-open') && searchInput.value === '') {
       navbarSearch.classList.remove('is-open');
+      navbar.classList.remove('navbar--search-open');
     }
   });
 
@@ -98,16 +100,20 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ==========================================================
      SCROLL REVEAL
      ========================================================== */
-  const revealTargets = document.querySelectorAll('.reveal, .reveal-left');
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
-        revealObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.15 });
-  revealTargets.forEach(el => revealObserver.observe(el));
+  const collectionBanners = document.querySelectorAll('.collection-banner');
+  if ('IntersectionObserver' in window) {
+    collectionBanners.forEach(el => el.classList.add('will-reveal'));
+    const revealTargets = document.querySelectorAll('.reveal, .reveal-left, .will-reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealTargets.forEach(el => revealObserver.observe(el));
+  }
 
   // Staggered reveal for note-cards
   const noteCards = document.querySelectorAll('.note-card');
@@ -156,7 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
     track.innerHTML = PRODUCTS.map(p => `
       <article class="product-card" data-id="${p.id}">
         <div class="product-card-img">
-          <span class="placeholder-icon">${p.type === 'watch' ? watchIconSVG : bottleIconSVG}</span>
+          <img src="${p.image}" alt="${p.brand} ${p.name}">
           ${p.oldPrice ? '<span class="product-card-tag">Oferta</span>' : ''}
         </div>
         <div class="product-card-body">
@@ -327,7 +333,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!p) return '';
         return `
           <div class="cart-item" data-id="${id}">
-            <div class="cart-item-img">${p.type === 'watch' ? watchIconSVG : bottleIconSVG}</div>
+            <div class="cart-item-img"><img src="${p.image}" alt="${p.brand} ${p.name}"></div>
             <div class="cart-item-info">
               <div class="cart-item-brand">${p.brand}</div>
               <div class="cart-item-name">${p.name}</div>
