@@ -5,18 +5,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
   /* ==========================================================
-     BRANDS — duplicate items for a seamless mobile marquee
-     ========================================================== */
-  const brandsRow = document.querySelector('.brands-row');
-  if (brandsRow) {
-    [...brandsRow.children].forEach((brand) => {
-      const duplicate = brand.cloneNode(true);
-      duplicate.setAttribute('aria-hidden', 'true');
-      brandsRow.appendChild(duplicate);
-    });
-  }
-
-  /* ==========================================================
      DATA — Produtos fictícios
      ========================================================== */
   const PRODUCTS = [
